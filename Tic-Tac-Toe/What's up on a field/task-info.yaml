@@ -222,6 +222,9 @@ files:
   visible: true
   text: '# write your code here'
   learner_created: false
+- name: tictactoe/tmp.py
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/73/stages/401/implement
 status: Solved
 record: -1
