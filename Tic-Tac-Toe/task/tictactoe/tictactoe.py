@@ -1,3 +1,12 @@
+# (1, 3) (2, 3) (3, 3)
+# (1, 2) (2, 2) (3, 2)
+# (1, 1) (2, 1) (3, 1)
+
+# (0, 0) (0, 1) (0, 2)
+# (1, 0) (1, 1) (1, 2)
+# (2, 0) (2, 1) (2, 2)
+
+
 def create_playing_field(size):
     tmp_field = []
     for i in range(size):
@@ -74,11 +83,63 @@ def check_state(field):
         print("Game not finished")
 
 
+def convert_coordinates(x, y):
+    if x == 1 and y == 1:
+        return 2, 0
+    if x == 2 and y == 1:
+        return 2, 1
+    if x == 3 and y == 1:
+        return 2, 2
+    if x == 1 and y == 2:
+        return 1, 0
+    if x == 2 and y == 2:
+        return 1, 1
+    if x == 3 and y == 2:
+        return 1, 2
+    if x == 1 and y == 3:
+        return 0, 0
+    if x == 2 and y == 3:
+        return 0, 1
+    if x == 3 and y == 3:
+        return 0, 2
+
+
+def is_input_correct(coordinates):
+    coordinates = coordinates.split()
+    if (len(coordinates) != 2):
+        print("You should enter numbers!")
+        return False
+    x = coordinates[0]
+    y = coordinates[1]
+    allowed_digits = '0123456789'
+    if str(x) not in allowed_digits or str(y) not in allowed_digits:
+        print("You should enter numbers!")
+        return False
+    if int(x) not in range(1, 4) or int(y) not in range(1, 4):
+        print("Coordinates should be from 1 to 3!")
+        return False
+    x, y = convert_coordinates(int(x), int(y))
+    if field[x][y] != '_':
+        print("This cell is occupied! Choose another one!")
+        return False
+    return True
+
+
+def make_move(x, y, sign):
+    field[x][y] = sign
 size = 3
 field = create_playing_field(size)
-initial_state = input('Enter cells:')
+
+initial_state = input("Enter cells:")
 initialize_playing_field(initial_state, size, field)
 print_playing_field(field)
-check_state(field)
+
+coordinates = input("Enter the coordinates:")
+while not is_input_correct(coordinates):
+    coordinates = input("Enter the coordinates:")
+coordinates = coordinates.split()
+x, y = convert_coordinates(int(coordinates[0]), int(coordinates[1]))
+make_move(x, y, 'X')
+print_playing_field(field)
 
 
