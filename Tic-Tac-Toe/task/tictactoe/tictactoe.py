@@ -36,6 +36,7 @@ def initialize_playing_field(initial_state, size, field):
 
 
 def check_state(field):
+    #True = game finished
     size = 3
     O_number = 0
     X_number = 0
@@ -62,25 +63,19 @@ def check_state(field):
     word_diag_2 = field[0][2] + field[1][1] + field[2][0]
     words.append(word_diag_1)
     words.append(word_diag_2)
-    if abs(O_number - X_number) > 1:
-        impossible = True
     if 'XXX' in words:
         x_victory = True
-    if 'OOO' in words:
-        o_victory = True
-    if x_victory and o_victory:
-        impossible = True
-
-    if impossible:
-        print("Impossible")
-    elif o_victory:
-        print("O wins")
-    elif x_victory:
         print("X wins")
+    elif 'OOO' in words:
+        o_victory = True
+        print("O wins")
     elif empty_cells == 0:
         print("Draw")
-    else:
-        print("Game not finished")
+    return x_victory or o_victory or empty_cells == 0
+
+
+
+
 
 
 def convert_coordinates(x, y):
@@ -127,19 +122,29 @@ def is_input_correct(coordinates):
 
 def make_move(x, y, sign):
     field[x][y] = sign
+
+
 size = 3
 field = create_playing_field(size)
 
-initial_state = input("Enter cells:")
+initial_state = "_________"
 initialize_playing_field(initial_state, size, field)
 print_playing_field(field)
 
-coordinates = input("Enter the coordinates:")
-while not is_input_correct(coordinates):
+moves = 0
+while not check_state(field):
+    sign = ''
+    if moves % 2 == 0:
+        sign = 'X'
+    else:
+        sign = 'O'
     coordinates = input("Enter the coordinates:")
-coordinates = coordinates.split()
-x, y = convert_coordinates(int(coordinates[0]), int(coordinates[1]))
-make_move(x, y, 'X')
-print_playing_field(field)
+    while not is_input_correct(coordinates):
+        coordinates = input("Enter the coordinates:")
+    coordinates = coordinates.split()
+    x, y = convert_coordinates(int(coordinates[0]), int(coordinates[1]))
+    make_move(x, y, sign)
+    print_playing_field(field)
+    moves += 1
 
 
